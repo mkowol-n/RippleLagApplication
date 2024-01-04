@@ -52,6 +52,7 @@ class FirstScreen : Screen {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FirstScreenContent() {
+    val navigator = LocalNavigator.current
     var items by remember {
         mutableStateOf<List<ItemModel>?>(null)
     }
@@ -80,14 +81,13 @@ private fun FirstScreenContent() {
                 items(it, key = { model ->
                     model.id
                 }) { model ->
-                    val navigator = LocalNavigator.current
                     Card(
-//                        onClick = {
-//                            navigator?.push(FirstScreen())
-//                        },
-                        modifier = Modifier.noRippleClickable {
+                        onClick = {
                             navigator?.push(FirstScreen())
                         },
+//                        modifier = Modifier.noRippleClickable {
+//                            navigator?.push(FirstScreen())
+//                        },
                         shape = RoundedCornerShape(3.dp)
                     ) {
                         AsyncImage(
