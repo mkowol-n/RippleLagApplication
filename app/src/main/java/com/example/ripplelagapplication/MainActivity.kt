@@ -21,7 +21,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.example.ripplelagapplication.ui.theme.RippleLagApplicationTheme
 
-val imageUrl = "https://i.imgur.com/8AA0I42.png"
+val imageUrl = "https://i.imgur.com/EemDWzm.png"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -5,11 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,7 +39,8 @@ import kotlinx.coroutines.delay
 import java.util.UUID
 
 fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
-    clickable(indication = null,
+    clickable(
+        indication = null,
         interactionSource = remember { MutableInteractionSource() }, onClick = onClick
     )
 }
@@ -54,18 +60,61 @@ class FirstScreen : Screen {
 private fun FirstScreenContent() {
     val navigator = LocalNavigator.current
     var items by remember {
-        mutableStateOf<List<ItemModel>?>(null)
+        mutableStateOf<List<List<ItemModel>>?>(null)
     }
     LaunchedEffect(Unit) {
         delay(150)
         items = listOf(
-            ItemModel(url = imageUrl),
-            ItemModel(url = imageUrl),
-            ItemModel(url = imageUrl),
-            ItemModel(url = imageUrl),
-            ItemModel(url = imageUrl),
-            ItemModel(url = imageUrl),
-            ItemModel(url = imageUrl),
+            listOf(
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+            ),
+            listOf(
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+            ),
+            listOf(
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+            ),
+            listOf(
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+            ),
+            listOf(
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+                ItemModel(url = imageUrl),
+            ),
         )
     }
     Crossfade(targetState = items, label = "") {
@@ -74,30 +123,38 @@ private fun FirstScreenContent() {
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
-                contentPadding = PaddingValues(14.dp),
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                items(it, key = { model ->
-                    model.id
-                }) { model ->
-                    Card(
-                        onClick = {
-                            navigator?.push(FirstScreen())
-                        },
-//                        modifier = Modifier.noRippleClickable {
-//                            navigator?.push(FirstScreen())
-//                        },
-                        shape = RoundedCornerShape(3.dp)
+                items?.forEach { rowItems ->
+                    LazyRow(
+                        contentPadding = PaddingValues(14.dp),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
                     ) {
-                        AsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(model.url)
-                                .crossfade(true)
-                                .build(),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                        )
+                        items(rowItems) { model ->
+                            Card(
+                                modifier = Modifier
+                                    .size(120.dp)
+                                    .noRippleClickable {
+                                        navigator?.push(FirstScreen())
+                                    },
+//                                onClick = {
+//                                    navigator?.push(FirstScreen())
+//                                },
+                                shape = RoundedCornerShape(3.dp)
+                            ) {
+                                AsyncImage(
+                                    model = ImageRequest.Builder(LocalContext.current)
+                                        .data(model.url)
+                                        .crossfade(true)
+                                        .build(),
+                                    contentDescription = null,
+                                    contentScale = ContentScale.Fit,
+                                )
+                            }
+
+                        }
                     }
                 }
             }
